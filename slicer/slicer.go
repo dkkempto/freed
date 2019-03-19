@@ -56,5 +56,9 @@ func SliceModels(s *Slicer, models []parser.Model, direction int) []Slice {
 
 	//We want to step through each plane and get the intersection with the meshes
 
+	for i := 0; i < numSlices; i++ {
+
+	}
+
 	return res
 }

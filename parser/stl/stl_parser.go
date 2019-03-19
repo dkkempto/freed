@@ -5,13 +5,13 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/dkkempto/freed/parser"
+	"github.com/dkkempto/freed/geometry"
 )
 
 type STLParser struct {
 }
 
-func (p STLParser) Parse(path string) []parser.Model {
+func (p STLParser) Parse(path string) []*geometry.Mesh {
 	f, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -22,7 +22,7 @@ func (p STLParser) Parse(path string) []parser.Model {
 
 	scanner.Split(bufio.ScanWords)
 
-	models := make([]parser.Model, 0)
+	models := make([]*geometry.Mesh, 0)
 
 	for scanner.Scan() {
 		token := scanner.Text()
@@ -30,12 +30,12 @@ func (p STLParser) Parse(path string) []parser.Model {
 		switch token {
 		case "solid":
 			scanner.Scan()
-			models = append(models, parser.Model{
+			models = append(models, &geometry.Mesh{
 				Name:      scanner.Text(),
-				Triangles: make([]parser.Triangle, 0),
+				Triangles: make([]geometry.Triangle, 0),
 			})
 		case "facet":
-			models[len(models)-1].Triangles = append(models[len(models)-1].Triangles, parser.Triangle{
+			models[len(models)-1].Triangles = append(models[len(models)-1].Triangles, geometry.Triangle{
 				V: make([][3]float64, 0),
 			})
 		case "normal":
@@ -74,6 +74,11 @@ func (p STLParser) Parse(path string) []parser.Model {
 		case "endfacet":
 		case "endsolid":
 		}
+	}
+
+	for _, model := range models {
+		res := geometry.NewBoundingBox(model)
+		model.BoundingBox = res
 	}
 
 	return models
