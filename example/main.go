@@ -9,9 +9,7 @@ import (
 func main() {
 	parser := stl.STLParser{}
 
-	models := parser.Parse("C:/development/personal/freed/example/Star.stl")
+	model := parser.ParseBinary("C:/development/personal/freed/example/dragon.stl")
 
-	for _, model := range models {
-		fmt.Println(model.String())
-	}
+	fmt.Println(model.String())
 }
