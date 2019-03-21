@@ -105,7 +105,7 @@ func (p STLParser) ParseBinary(path string) *geometry.Mesh {
 	numTriangles := binary.LittleEndian.Uint32(bNumTriangles)
 
 	model := &geometry.Mesh{
-		Triangles: make([]*geometry.Triangle, numTriangles),
+		Triangles: make([]*geometry.Triangle, 0),
 	}
 
 	var i uint32
