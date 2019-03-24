@@ -26,17 +26,17 @@ func (p *Plane) GetIntersectionTriangle(t *Triangle) ([]float64, [][3]float64) {
 
 	if t0 >= 0 && t0 <= 1 {
 		tValues = append(tValues, t0)
-		intersections = append(intersections, Add(t.V[0], At(e0, t0)))
+		intersections = append(intersections, Add(t.V[0], Scale(e0, t0)))
 	}
 
 	if t1 >= 0 && t1 <= 1 {
 		tValues = append(tValues, t1)
-		intersections = append(intersections, Add(t.V[1], At(e1, t1)))
+		intersections = append(intersections, Add(t.V[1], Scale(e1, t1)))
 	}
 
 	if t2 >= 0 && t2 <= 1 {
 		tValues = append(tValues, t2)
-		intersections = append(intersections, Add(t.V[2], At(e2, t2)))
+		intersections = append(intersections, Add(t.V[2], Scale(e2, t2)))
 	}
 
 	return tValues, intersections

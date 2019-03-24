@@ -19,7 +19,7 @@ func check(e error) {
 	}
 }
 
-func (p STLParser) Parse(path string) []*geometry.Mesh {
+func (p STLParser) Parse(path string) *geometry.Mesh {
 	f, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -89,7 +89,7 @@ func (p STLParser) Parse(path string) []*geometry.Mesh {
 		model.BoundingBox = &res
 	}
 
-	return models
+	return models[0]
 }
 
 func (p STLParser) ParseBinary(path string) *geometry.Mesh {
@@ -104,7 +104,7 @@ func (p STLParser) ParseBinary(path string) *geometry.Mesh {
 
 	numTriangles := binary.LittleEndian.Uint32(bNumTriangles)
 
-	model := &geometry.Mesh{
+	mesh := &geometry.Mesh{
 		Triangles: make([]*geometry.Triangle, 0),
 	}
 
@@ -146,7 +146,7 @@ func (p STLParser) ParseBinary(path string) *geometry.Mesh {
 		err = binary.Read(buf, binary.LittleEndian, &v2f2)
 		check(err)
 
-		model.AddTriangle(
+		mesh.AddTriangle(
 			&geometry.Triangle{
 				N: [3]float64{float64(n0), float64(n1), float64(n2)},
 				V: [][3]float64{
@@ -157,7 +157,8 @@ func (p STLParser) ParseBinary(path string) *geometry.Mesh {
 			},
 		)
 	}
+	mesh.KDTree = geometry.BuildKDNode(mesh.Triangles, 0)
 
-	return model
+	return mesh
 
 }

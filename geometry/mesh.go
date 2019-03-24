@@ -5,6 +5,7 @@ import "fmt"
 type Mesh struct {
 	Name        string
 	BoundingBox *BoundingBox
+	KDTree      *KDNode
 	Triangles   []*Triangle
 }
 
@@ -31,11 +32,29 @@ func (m *Mesh) AddTriangle(t *Triangle) {
 	m.Triangles = append(m.Triangles, t)
 }
 
+func (m *Mesh) GetIntersections(r *Ray) ([]float64, [][3]float64) {
+	//TODO: Implement this
+	/**
+	This method will take in a ray, and return the intersections with the mesh
+	*/
+	tValues := make([]float64, 0)
+	intersections := make([][3]float64, 0)
+
+	for _, triangle := range m.Triangles {
+		t, intersection := triangle.GetIntersection(r)
+		if t != 0.0 {
+			tValues = append(tValues, t)
+			intersections = append(intersections, intersection)
+		}
+	}
+
+	return tValues, intersections
+
+	// return m.KDTree.GetIntersections(r)
+}
+
 func (m *Mesh) String() string {
 	res := fmt.Sprintf("Name: %v\n", m.Name)
-	// for _, t := range m.Triangles {
-	// 	res += fmt.Sprintf("%v\n", t.String())
-	// }
 	res += fmt.Sprintf("%v\n", m.BoundingBox.String())
 	return res
 }

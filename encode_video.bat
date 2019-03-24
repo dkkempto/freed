@@ -1,0 +1,1 @@
+ffmpeg -r 60 -f image2 -s 1920x1080 -i "C:/development/personal/freed/res/slice_%%08d.png" -vcodec libx264 -crf 25 -pix_fmt yuv420p C:/development/personal/freed/test.mp4
